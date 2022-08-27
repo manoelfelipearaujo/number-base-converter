@@ -22,6 +22,20 @@ const toBaseN = (number, base, baseN) => {
 
     let result = "";
 
+    // Error handling #1: input must be a valid number
+    if (isNaN(parseInt(number, base))) return "Input must be a valid number";
+
+    // Error handling #2: input must a integer number
+    let validator = false;
+    let charArray = number.split("");
+    validator =  charArray.some(char => {
+        return char === ".";
+    });
+    if (validator) return "Input must be an integer number";
+
+    // Error handling #3: input must be a positive number
+    if(parseInt(number, base) < 0) return "Input must be a positive number";
+
     // Convert number to decimal, toDec() returns a string
     number = toDec(number, base);
 
@@ -66,13 +80,21 @@ const toBaseN = (number, base, baseN) => {
 
 }
 
-const getVal = () => {
+const updateDOM = () => {
 
-    let number, base, baseN;
+    let number, base, baseN, result;
+
     number = document.getElementById("number").value;
     base = document.getElementById("base").value;
     baseN = document.getElementById("baseN").value;
+    result = toBaseN(number, base, baseN);
 
-    document.getElementById('result').innerHTML = toBaseN(number, base, baseN);
+    document.getElementById("result").innerHTML = result;
+
+    if (result === "Input must be a valid number" || result === "Input must be a positive number" || result === "Input must be an integer number") {
+        document.getElementById("result").style.color = "red";
+    } else {
+        document.getElementById("result").style.color = "black";
+    }
 
 }
